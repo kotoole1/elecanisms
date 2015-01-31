@@ -3,8 +3,31 @@
 #include "common.h"
 #include "ui.h"
 #include "timer.h"
+#include "pin.h"
+
+void stop_motor() {
+    pin_clear(&D[5]);
+    pin_clear(&D[6]);
+}
+
+void start_motor_clockwise() {
+    pin_set(&D[5]);
+}
+
+void setup_motor() {
+    pin_digitalOut(&D[2]);
+    pin_clear(&D[2]);
+    pin_digitalOut(&D[3]);
+    pin_set(&D[3]);
+    pin_digitalOut(&D[4]);
+    pin_set(&D[4]);
+    pin_digitalOut(&D[5]);
+    pin_digitalOut(&D[6]);
+    stop_motor();
+}
 
 int16_t main(void) {
+    setup_motor();
     init_clock();
     init_ui();
     init_timer();
@@ -18,8 +41,12 @@ int16_t main(void) {
             timer_lower(&timer2);
             led_toggle(&led1);
         }
-        led_write(&led2, !sw_read(&sw2));
-        led_write(&led3, !sw_read(&sw3));
+        
+        led_write(&led3, !sw_read(&sw2));
+
+        if (!sw_read(&sw1))
+        {
+            start_motor_clockwise();
+        }
     }
 }
-
