@@ -15,11 +15,12 @@ void start_motor_clockwise() {
 }
 
 void setup_motor() {
+    init_pin();
     pin_digitalOut(&D[2]);
-    pin_clear(&D[2]);
     pin_digitalOut(&D[3]);
-    pin_set(&D[3]);
     pin_digitalOut(&D[4]);
+    pin_set(&D[2]);
+    pin_clear(&D[3]);
     pin_set(&D[4]);
     pin_digitalOut(&D[5]);
     pin_digitalOut(&D[6]);
@@ -28,13 +29,14 @@ void setup_motor() {
 
 int16_t main(void) {
     setup_motor();
+    // start_motor_clockwise();
     init_clock();
     init_ui();
     init_timer();
 
-    led_on(&led1);
-    timer_setPeriod(&timer2, 0.5);
-    timer_start(&timer2);
+    // led_on(&led1);
+    // timer_setPeriod(&timer2, 0.5);
+    // timer_start(&timer2);
 
     while (1) {
         if (timer_flag(&timer2)) {
@@ -44,9 +46,6 @@ int16_t main(void) {
         
         led_write(&led3, !sw_read(&sw2));
 
-        if (!sw_read(&sw1))
-        {
-            start_motor_clockwise();
-        }
+        pin_write(&D[5], !sw_read(&sw1));
     }
 }

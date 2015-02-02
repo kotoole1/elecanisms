@@ -15,9 +15,9 @@ list = Builder(action = 'xc16-objdump -S -D -omf=coff $SOURCE > $TARGET',
                src_suffix = 'cof')
 env.Append(BUILDERS = {'List' : list})
 
-env.Program('helloMotor', ['helloMotor.c',
+env.Program('hello', ['hello.c',
                       '../lib/timer.c',
                       '../lib/ui.c',
                       '../lib/pin.c'])
-env.Hex('helloMotor')
-env.List('helloMotor')
+env.Hex('hello')
+env.List('hello')
