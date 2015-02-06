@@ -9,7 +9,7 @@ env = Environment(PIC = '24FJ128GB206',
 
 if platform.system() == 'Linux':
     env.PrependENVPath('PATH', '/opt/microchip/xc16/v1.24/bin')
-else if platform.systme == 'Darwin':
+elif platform.system() == 'Darwin':
     env.PrependENVPath('PATH', '/Applications/microchip/xc16/v1.24/bin')
 
 bin2hex = Builder(action = 'xc16-bin2hex $SOURCE -omf=coff',
