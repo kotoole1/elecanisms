@@ -5339,7 +5339,7 @@ void timer_cancel(_TIMER *self) {
     3106:	23 4e 20    	mov.w     #0x4e2, w3
     3108:	82 2c 20    	mov.w     #0x2c8, w2
     310a:	a1 2c 20    	mov.w     #0x2ca, w1
-    310c:	40 93 20    	mov.w     #0x934, w0
+    310c:	20 9a 20    	mov.w     #0x9a2, w0
     310e:	64 00 07    	rcall     0x31d8 <_pin_init>
     3110:	8f 87 e9    	dec2.w    w15, w15
     3112:	04 6c 20    	mov.w     #0x6c0, w4
@@ -5351,7 +5351,7 @@ void timer_cancel(_TIMER *self) {
     311e:	23 4e 20    	mov.w     #0x4e2, w3
     3120:	82 2c 20    	mov.w     #0x2c8, w2
     3122:	a1 2c 20    	mov.w     #0x2ca, w1
-    3124:	a0 94 20    	mov.w     #0x94a, w0
+    3124:	c0 98 20    	mov.w     #0x98c, w0
     3126:	58 00 07    	rcall     0x31d8 <_pin_init>
     3128:	8f 87 e9    	dec2.w    w15, w15
     312a:	c4 6c 20    	mov.w     #0x6cc, w4
@@ -5363,7 +5363,7 @@ void timer_cancel(_TIMER *self) {
     3136:	23 4e 20    	mov.w     #0x4e2, w3
     3138:	82 2c 20    	mov.w     #0x2c8, w2
     313a:	a1 2c 20    	mov.w     #0x2ca, w1
-    313c:	00 96 20    	mov.w     #0x960, w0
+    313c:	60 97 20    	mov.w     #0x976, w0
     313e:	4c 00 07    	rcall     0x31d8 <_pin_init>
     3140:	8f 87 e9    	dec2.w    w15, w15
     3142:	00 02 eb    	clr.w     w4
@@ -5375,7 +5375,7 @@ void timer_cancel(_TIMER *self) {
     314e:	23 4e 20    	mov.w     #0x4e2, w3
     3150:	82 2c 20    	mov.w     #0x2c8, w2
     3152:	a1 2c 20    	mov.w     #0x2ca, w1
-    3154:	60 97 20    	mov.w     #0x976, w0
+    3154:	00 96 20    	mov.w     #0x960, w0
     3156:	40 00 07    	rcall     0x31d8 <_pin_init>
     3158:	8f 87 e9    	dec2.w    w15, w15
     315a:	c4 6d 20    	mov.w     #0x6dc, w4
@@ -5387,7 +5387,7 @@ void timer_cancel(_TIMER *self) {
     3166:	23 4e 20    	mov.w     #0x4e2, w3
     3168:	82 2c 20    	mov.w     #0x2c8, w2
     316a:	a1 2c 20    	mov.w     #0x2ca, w1
-    316c:	c0 98 20    	mov.w     #0x98c, w0
+    316c:	a0 94 20    	mov.w     #0x94a, w0
     316e:	34 00 07    	rcall     0x31d8 <_pin_init>
     3170:	8f 87 e9    	dec2.w    w15, w15
     3172:	24 6d 20    	mov.w     #0x6d2, w4
@@ -5399,7 +5399,7 @@ void timer_cancel(_TIMER *self) {
     317e:	23 4e 20    	mov.w     #0x4e2, w3
     3180:	82 2c 20    	mov.w     #0x2c8, w2
     3182:	a1 2c 20    	mov.w     #0x2ca, w1
-    3184:	20 9a 20    	mov.w     #0x9a2, w0
+    3184:	40 93 20    	mov.w     #0x934, w0
     3186:	28 00 07    	rcall     0x31d8 <_pin_init>
     3188:	8f 87 e9    	dec2.w    w15, w15
     318a:	00 02 eb    	clr.w     w4

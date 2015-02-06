@@ -27,8 +27,8 @@ env.Program('helloMotor', ['helloMotor.c',
                       '../lib/pin.c'])
 
 env.Program('hello', ['hello.c',
-                      '../lib/uart.c',
-                      '../lib/pin.c'])
+                      '../lib/uart.c'])
+)
 
 env.Hex('analogRead')
 env.List('analogRead')
