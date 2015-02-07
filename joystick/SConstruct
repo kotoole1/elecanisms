@@ -21,26 +21,16 @@ list = Builder(action = 'xc16-objdump -S -D -omf=coff $SOURCE > $TARGET',
                src_suffix = 'cof')
 env.Append(BUILDERS = {'List' : list})
 
-env.Program('analogRead', ['analogRead.c',
-                      '../lib/timer.c',
-                      '../lib/ui.c',
-                      '../lib/pin.c',
-                      '../lib/uart.c'])
+dependencies = ['../lib/timer.c',
+                '../lib/ui.c',
+                '../lib/pin.c',
+                '../lib/uart.c']
 
-env.Program('helloMotor', ['helloMotor.c',
-                      '../lib/timer.c',
-                      '../lib/ui.c',
-                      '../lib/pin.c'])
+functions = ['analogRead',
+             'helloMotor',
+             'hello']
 
-env.Program('hello', ['hello.c',
-                      '../lib/uart.c',
-                      '../lib/pin.c'])
-
-env.Hex('analogRead')
-env.List('analogRead')
-
-env.Hex('helloMotor')
-env.List('helloMotor')
-
-env.Hex('hello')
-env.List('hello')
+for function in functions:
+    env.Program(function, [function + '.c'] + dependencies)
+    env.Hex('function')
+    env.List('function')
