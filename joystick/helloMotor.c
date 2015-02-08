@@ -4,10 +4,46 @@
 #include "ui.h"
 #include "timer.h"
 #include "pin.h"
+#include "oc.h"
+
+volatile uint16_t pin5;
+volatile uint16_t switch1;
+
+typedef enum {
+    ON,
+    PWM,
+    OFF
+} MotorState;
+
+MotorState motor_state = OFF;
+
+void pwm_motor(void)
+{
+    oc_pwm(&oc1, &D[4], NULL, 500, 1023 << 6);
+}
 
 void stop_motor() {
     pin_clear(&D[5]);
     pin_clear(&D[6]);
+}
+
+void read_pins(_TIMER *self) {
+    pin5 = pin_read(&A[5]) >> 6;
+    switch1 = sw_read(&sw1);
+    if (motor_state == OFF) {
+        if (switch1) {
+            motor_state = PWM;
+            pwm_motor();
+        }
+    }
+    if (motor_state == PWM)
+    {
+        if (!switch1)
+        {
+            motor_state = OFF;
+            stop_motor();
+        }
+    }
 }
 
 void start_motor_clockwise() {
@@ -29,23 +65,21 @@ void setup_motor() {
 
 int16_t main(void) {
     setup_motor();
-    // start_motor_clockwise();
     init_clock();
     init_ui();
     init_timer();
+    init_oc();
 
-    // led_on(&led1);
-    // timer_setPeriod(&timer2, 0.5);
-    // timer_start(&timer2);
+    timer_every(&timer2, 0.001, read_pins);
 
     while (1) {
-        if (timer_flag(&timer2)) {
-            timer_lower(&timer2);
-            led_toggle(&led1);
-        }
-        
-        led_write(&led3, !sw_read(&sw2));
-
-        pin_write(&D[5], !sw_read(&sw1));
+        // if (switch1)
+        // {
+        //     oc_pwm(&oc1, &D[4], NULL, 500, 1023 << 6);
+        // }
+        // else
+        // {
+        //     pin_clear(&D[4]);
+        // }
     }
 }
