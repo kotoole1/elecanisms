@@ -10,8 +10,7 @@
 volatile uint16_t pin5;
 volatile uint16_t switch1;
 volatile uint16_t lastAngle;
-const uint16_t threshold = 500;
-
+uint16_t flipThreshold = 200;
 
 typedef enum {
     ON,
@@ -51,8 +50,9 @@ void flipped(){
 
 void read_pins() {
     pin5 = pin_read(&A[5]) >> 6;
-    printf("%d \n",pin5);
-    if (abs(pin5 - lastAngle) >= threshold){
+    // printf("%d, \n %d \n", lastAngle - pin5, flipThreshold);
+    uint16_t difference = lastAngle - pin5; 
+    if (!(difference > 0x8000) && difference >= flipThreshold) {
         flipped();
     }
     lastAngle = pin5;
