@@ -11,6 +11,7 @@ volatile uint16_t pin5;
 volatile uint16_t switch1;
 volatile uint16_t lastAngle;
 uint16_t flipThreshold = 200;
+volatile uint16_t numPassed;
 
 typedef enum {
     ON,
@@ -45,10 +46,12 @@ void pwm_motor(void)
 }
 
 void flipped(){
-    printf("%d, %d \n", pin5, lastAngle);
+    printf("%d \n", numPassed);
+    numPassed = 0;
 }
 
 void read_pins() {
+    numPassed = numPassed + 1;
     pin5 = pin_read(&A[5]) >> 6;
     // printf("%d, \n %d \n", lastAngle - pin5, flipThreshold);
     uint16_t difference = lastAngle - pin5; 
