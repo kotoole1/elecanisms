@@ -9,6 +9,9 @@
 
 volatile uint16_t pin5;
 volatile uint16_t switch1;
+volatile uint16_t lastAngle;
+const uint16_t threshold = 500;
+
 
 typedef enum {
     ON,
@@ -42,13 +45,21 @@ void pwm_motor(void)
     oc_pwm(&oc1, &D[4], NULL, 500, 1023 << 6);
 }
 
+void flipped(){
+    printf("%d, %d \n", pin5, lastAngle);
+}
+
 void read_pins() {
     pin5 = pin_read(&A[5]) >> 6;
+    printf("%d \n",pin5);
+    if (abs(pin5 - lastAngle) >= threshold){
+        flipped();
+    }
+    lastAngle = pin5;
 }
 
 void switch_state() {
     switch1 = sw_read(&sw1);
-    printf("%d\n", motor_state);
     if (motor_state == FREE) {
         if (!switch1) {
             motor_state = PWM;
@@ -99,7 +110,7 @@ int16_t main(void) {
     timer_setPeriod(&timer2, 0.01);
     timer_start(&timer2);
 
-
+    lastAngle = pin_read(&A[5]) >> 6;
     while (1) {
         if (timer_flag(&timer1)) {
             timer_lower(&timer1);
