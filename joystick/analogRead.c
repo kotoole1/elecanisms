@@ -26,7 +26,6 @@ int16_t main(void) {
     timer_setPeriod(&timer1, 0.1);
     timer_start(&timer1);
 
-
     int i;
     for (i = 0; i<6; i++) {
         pin_analogIn(&A[i]);

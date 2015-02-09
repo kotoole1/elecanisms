@@ -11,7 +11,7 @@ volatile uint16_t pin5;
 volatile uint16_t switch1;
 volatile uint16_t lastAngle;
 uint16_t flipThreshold = 200;
-volatile uint16_t numPassed;
+volatile uint16_t numPassed = 0;
 
 typedef enum {
     ON,
@@ -19,6 +19,10 @@ typedef enum {
     OFF,
     FREE
 } MotorState;
+
+// typedef enum {
+    
+// }
 
 MotorState motor_state = FREE;
 
@@ -55,7 +59,7 @@ void read_pins() {
     pin5 = pin_read(&A[5]) >> 6;
     // printf("%d, \n %d \n", lastAngle - pin5, flipThreshold);
     uint16_t difference = lastAngle - pin5; 
-    if (!(difference > 0x8000) && difference >= flipThreshold) {
+    if (difference < 0x8000 && difference >= flipThreshold) {
         flipped();
     }
     lastAngle = pin5;
@@ -112,6 +116,8 @@ int16_t main(void) {
     timer_start(&timer1);
     timer_setPeriod(&timer2, 0.01);
     timer_start(&timer2);
+
+
 
     lastAngle = pin_read(&A[5]) >> 6;
     while (1) {
