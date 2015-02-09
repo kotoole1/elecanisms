@@ -2,6 +2,7 @@ import serial
 import time
 import matplotlib.pyplot as plt
 import platform
+import numpy as np
 
 if platform.system() == 'Linux':
 	ser = serial.Serial('/dev/ttyUSB0', 19200, timeout=1)
@@ -27,7 +28,7 @@ def getData():
 	ser.close()
 	return values
 
-def processData(data):
+def processDownData(data):
 	data.remove(max(data))
 	samplingTime = .0001 #seconds
 	total = 0
@@ -41,22 +42,34 @@ def processData(data):
 		for i in xrange(len(data) - timeConstant)]
 	return times, speeds
 
-def makePlots(times, speeds, plotType):
-	if plotType == "spin-down":
-		plt.plot(times[:-timeConstant], speeds)
-		plt.ylabel("Speed of motor (rotations per second)")
-		plt.xlabel("Time (s)")
-		plt.title("Spin Down Test", fontsize="28")
+def processCaliData(data):
+	# times = [value * 0.0001 for value in range(len(data))]
+	times = np.linspace(0,3, len(data))
+	speeds = [int(value)/1024.0*3.3 for value in data]
+	return times, speeds
 
-	elif plotType == "calibration":
-		plt.plot(values)
-		plt.ylabel("Voltage")
-		plt.xlabel("Angle")
+def plotDownGraph(times, speeds):
+	plt.plot(times[:-timeConstant], speeds)
+	plt.ylabel("Speed of motor (rotations per second)")
+	plt.xlabel("Time (s)")
+	plt.title("Spin Down Test", fontsize="28")
+	plt.show()
+
+
+def plotCaliGraph(times, speeds):
+	plt.plot(times, speeds)
+	plt.ylabel("Voltage(V)")
+	plt.xlabel("Time(s)")
+	plt.title("Calibration Test")
 	plt.show()
 
 if __name__ == "__main__":
-
-	values = getData()
-	times, speeds = processData(values)
-	makePlots(times, speeds, 'spin-down')
+	plotType = "down"
+	value = getData()
+	if plotType == "cali":
+		times, speeds = processCaliData(value)
+		plotCaliGraph(times, speeds)
+	elif plotType == "down":
+		times, speeds = processDownData(value)
+		plotDownGraph(times, speeds)	
 

@@ -20,10 +20,12 @@ typedef enum {
     FREE
 } MotorState;
 
-// typedef enum {
-    
-// }
+typedef enum {
+  DOWN,
+  CALIBRATE  
+} DataState;
 
+DataState data_state = DOWN;
 MotorState motor_state = FREE;
 
 void stop_motor() {
@@ -83,6 +85,13 @@ void switch_state() {
     }
 }
 
+void calibrate() {
+    pin5 = pin_read(&A[5]) >> 6;
+    printf("%d \n", pin5);
+
+
+}
+
 void setup_pins() {
     int i;
     for (i = 0; i<6; i++) {
@@ -123,7 +132,12 @@ int16_t main(void) {
     while (1) {
         if (timer_flag(&timer1)) {
             timer_lower(&timer1);
-            read_pins();
+            if (data_state == DOWN){
+                read_pins();
+            }
+            else if (data_state == CALIBRATE){
+                calibrate();
+            }
         }
         if (timer_flag(&timer2)) {
             timer_lower(&timer2);
