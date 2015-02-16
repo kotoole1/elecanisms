@@ -25,11 +25,15 @@ dependencies = ['../lib/timer.c',
                 '../lib/ui.c',
                 '../lib/pin.c',
                 '../lib/uart.c',
-                '../lib/oc.c']
+                '../lib/oc.c',
+                '../lib/motor.c',
+                '../lib/analogRead.c',
+                ]
 
-functions = ['analogRead',
-             'helloMotor',
-             'hello']
+functions = [
+             'joystick',
+             # 'hello',
+             ]
 
 for function in functions:
     env.Program(function, [function + '.c'] + dependencies)
