@@ -1,4 +1,3 @@
-
 import usb.core
 
 class hellousb:
@@ -42,3 +41,6 @@ class hellousb:
         except usb.core.USBError:
             print "Could not send PRINT_VALS vendor request."
 
+if __name__ == '__main__':
+    usb = hellousb()
+    usb.hello()
