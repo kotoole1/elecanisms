@@ -21,7 +21,7 @@ list = Builder(action = 'xc16-objdump -S -D -omf=coff $SOURCE > $TARGET',
                src_suffix = 'cof')
 env.Append(BUILDERS = {'List' : list})
 
-dependencies = ['../lib/timer.c',
+baseDependencies = ['../lib/timer.c',
                 '../lib/ui.c',
                 '../lib/pin.c',
                 '../lib/uart.c',
@@ -30,12 +30,12 @@ dependencies = ['../lib/timer.c',
                 '../lib/analogRead.c',
                 ]
 
-functions = [
-             'joystick',
-             # 'hello',
-             ]
+functions = {
+                'joystick' : baseDependencies + ['usb.c'] + ['descriptors.c'],
+                'hello'    : baseDependencies
+            }
 
-for function in functions:
+for function, dependencies in functions.items():
     env.Program(function, [function + '.c'] + dependencies)
     env.Hex(function)
     env.List(function)

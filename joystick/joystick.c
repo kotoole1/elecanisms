@@ -8,10 +8,13 @@
 #include "uart.h"
 #include "motor.h"
 #include "analogRead.h"
+#include "usb.h"
+#define HELLO       0   // Vendor request that prints "Hello World!"
 
 volatile uint16_t lastAngle;
 uint16_t flipThreshold = 200;
 volatile uint16_t numPassed = 0;
+
 
 void switch_state() {
     switch1 = sw_read(&sw1);
@@ -33,6 +36,40 @@ void switch_state() {
 
 void get_angle(void) {
     printf("%d\n", pin5);
+    // printAngle()
+}
+
+void VendorRequests(void) {
+    WORD temp;
+
+    switch (USB_setup.bRequest) {
+        case HELLO:
+            printf("Hello World!\n");
+            BD[EP0IN].bytecount = 0;    // set EP0 IN byte count to 0 
+            BD[EP0IN].status = 0xC8;    // send packet as DATA1, set UOWN bit
+            break;
+    }
+}
+
+// void printAngle() {
+//     printf("%d\n", pin5);
+//     // printf("Hello World!\n");
+//     BD[EP0IN].bytecount = 0;    // set EP0 IN byte count to 0 
+//     BD[EP0IN].status = 0xC8;    // send packet as DATA1, set UOWN bit    
+// }
+
+void VendorRequestsIn(void) {
+    switch (USB_request.setup.bRequest) {
+        default:
+            USB_error_flags |= 0x01;                    // set Request Error Flag
+    }
+}
+
+void VendorRequestsOut(void) {
+    switch (USB_request.setup.bRequest) {
+        default:
+            USB_error_flags |= 0x01;                    // set Request Error Flag
+    }
 }
 
 int16_t main(void) {
@@ -44,6 +81,8 @@ int16_t main(void) {
     init_oc();
     init_analog_read();
     init_motor();
+    InitUSB();
+
 
     timer_setPeriod(&timer1, 0.0001);
     timer_start(&timer1);
