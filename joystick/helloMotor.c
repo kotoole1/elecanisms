@@ -25,7 +25,7 @@ typedef enum {
   CALIBRATE
 } DataState;
 
-DataState data_state = DOWN;
+DataState data_state = CALIBRATE;
 MotorState motor_state = FREE;
 
 void stop_motor() {
@@ -87,8 +87,6 @@ void switch_state() {
 void calibrate() {
     pin5 = pin_read(&A[5]) >> 6;
     printf("%d \n", pin5);
-
-
 }
 
 void setup_pins() {
@@ -124,8 +122,6 @@ int16_t main(void) {
     timer_start(&timer1);
     timer_setPeriod(&timer2, 0.01);
     timer_start(&timer2);
-
-
 
     lastAngle = pin_read(&A[5]) >> 6;
     while (1) {

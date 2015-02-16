@@ -17,13 +17,14 @@ def getData():
 	print "started serial read"
 	while 1:
 		line = ser.readline()   # read a '\n' terminated line
+		print "read a line"
 		try:
-			if int(line) < 600 and int(line) > 0:
-				values.append(int(line))
+			# if int(line) < 600 and int(line) > 0:
+			values.append(int(line))
 		except:
 			print line
 		if time.time() - startTime > 3:
-			break 
+			break
 	print "Finished gathering data"
 	ser.close()
 	return values
@@ -64,7 +65,7 @@ def plotCaliGraph(times, speeds):
 	plt.show()
 
 if __name__ == "__main__":
-	plotType = "down"
+	plotType = "cali"
 	value = getData()
 	if plotType == "cali":
 		times, speeds = processCaliData(value)
