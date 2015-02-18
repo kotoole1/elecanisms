@@ -6,8 +6,9 @@
 #include "oc.h"
 #include "uart.h"
 #include "motor.h"
+#include <stdbool.h> 
 
-MotorState motor_state = FREE;
+MotorState motor_state = SPRING;
 volatile uint16_t switch1;
 
 void stop_motor() {
@@ -19,6 +20,14 @@ void start_motor_clockwise() {
     pin_clear(&D[3]);
     pin_set(&D[4]);
     pin_set(&D[5]);
+    pin_clear(&D[6]);
+}
+
+void start_motor_counterClockwise() {
+    pin_clear(&D[3]);
+    pin_set(&D[4]);
+    pin_clear(&D[5]);
+    pin_set(&D[6]);   
 }
 
 void freespin_motor() {
@@ -27,11 +36,18 @@ void freespin_motor() {
     stop_motor();
 }
 
-void pwm_motor(int duty)
+void pwm_motor(uint16_t duty, bool direction)
 {
-    start_motor_clockwise();
-    oc_pwm(&oc1, &D[4], NULL, 500, duty << 6);
+    if (direction) {
+        start_motor_clockwise();
+    }
+    else {
+        start_motor_counterClockwise();
+    }
+        oc_pwm(&oc1, &D[4], NULL, 500, duty << 6);
 }
+
+
 
 void init_motor() {
     pin_digitalOut(&D[2]);

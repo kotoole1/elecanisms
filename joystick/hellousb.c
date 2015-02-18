@@ -8,8 +8,9 @@
 
 #define HELLO       0   // Vendor request that prints "Hello World!"
 #define SET_VALS    1   // Vendor request that receives 2 unsigned integer values
-#define GET_VALS    2   // Vendor request that returns 2 unsigned integer values
+#define RESET       2
 #define PRINT_VALS  3   // Vendor request that prints 2 unsigned integer values 
+#define GET_VALS    4   // Vendor request that returns 2 unsigned integer values
 
 uint16_t val1, val2;
 
@@ -29,6 +30,11 @@ void VendorRequests(void) {
             BD[EP0IN].bytecount = 0;    // set EP0 IN byte count to 0 
             BD[EP0IN].status = 0xC8;    // send packet as DATA1, set UOWN bit
             break;
+        case RESET:
+            val1 = 0;
+            BD[EP0IN].bytecount = 0;    // set EP0 IN byte count to 0 
+            BD[EP0IN].status = 0xC8;    // send packet as DATA1, set UOWN bit
+            break;            
         case SET_VALS:
             val1 = USB_setup.wValue.w;
             val2 = USB_setup.wIndex.w;

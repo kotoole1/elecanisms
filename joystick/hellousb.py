@@ -5,6 +5,7 @@ class hellousb:
     def __init__(self):
         self.GET_PIN = 0
         self.GET_ANGLE = 1
+        self.RESET = 2
         # self.GET_VALS = 2
         # self.PRINT_VALS = 3
         self.dev = usb.core.find(idVendor = 0x6666, idProduct = 0x0003)
@@ -14,6 +15,12 @@ class hellousb:
 
     def close(self):
         self.dev = None
+
+    def reset(self):
+        try:
+            self.dev.ctrl_transfer(0x40, self.RESET)
+        except usb.core.USBError:
+            print "Could not send SET_VALS vendor request."        
 
     def get_pin(self):
         try:
