@@ -12,22 +12,20 @@ class MotorState(object):
     TEXTURE = 6
     WALL = 7
 
-        
-
-
 if __name__ == '__main__':
     usb = hellousb()
     while True:
         key = raw_input()
-        if key == 'z':
+        if key is 'z':
             usb.reset() 
-        if key == 's':
+        if key is 's':
             usb.set_mode(MotorState.SPRING)
-        if key == 'd':
+        if key is 'd':
             usb.set_mode(MotorState.DAMPER)
-        if key == 't':
+        if key is 't':
             usb.set_mode(MotorState.TEXTURE)
-        if key == 'w':
+        if key is 'w':
             usb.set_mode(MotorState.WALL)
-        # usb.get_angle()
+        if key is 'g':
+            usb.get_angle()
         # time.sleep(.1)

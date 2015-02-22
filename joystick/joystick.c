@@ -40,6 +40,10 @@ uint16_t flipThreshold = 500;
 volatile uint16_t numPassed = 0;
 volatile double joystickAngle = 0.0;
 
+double wallPosition = 1.0;
+
+bool textureOn;
+
 bool flipped;
 
 
@@ -84,51 +88,79 @@ void updateAngle(void) {
 }
 
 void printAngle() {
-    printf("%f, %d, %f\n", joystickAngle, motorValue, fabs(joystickAngle)); 
+    printf("%f, %d\n", joystickAngle, textureOn); 
+}
+
+void spring(void) {
+    if (joystickAngle > buffer) {
+        motorValue = (uint16_t)((joystickAngle - buffer )* 100);
+        motorDirection = CLOCKWISE;
+        pwm_motor(motorValue, motorDirection);
+    }
+    else if (joystickAngle < -buffer){
+        motorValue = (uint16_t)((-joystickAngle + buffer) * 100);                
+        motorDirection = COUNTERCLOCKWISE;
+        pwm_motor(motorValue, motorDirection);
+    }
+    else {
+        freespin_motor();   
+    }
+}
+
+void damper(uint32_t damping_constant) {
+    if (joystickSpeed > speedBuffer) {
+        motorValue = (uint16_t)((joystickSpeed - speedBuffer) * damping_constant);
+        motorDirection = COUNTERCLOCKWISE;
+        pwm_motor(motorValue, motorDirection);
+
+    }
+    else if (joystickSpeed < -speedBuffer){
+        motorValue = (uint16_t)((-joystickSpeed + speedBuffer) * damping_constant);                
+        motorDirection = CLOCKWISE;
+        pwm_motor(motorValue, motorDirection);
+    }
+    else {
+        freespin_motor();
+    }
+}
+
+void texture(void) {
+    textureOn = ((uint32_t)floor(joystickAngle * 3)) % 2;
+    if (textureOn) {
+        damper(200000);
+    }
+    else {
+        freespin_motor();
+    }
+}
+
+void wall() {
+    if (joystickAngle > wallPosition) {
+        motorValue = 1000;
+        motorDirection = CLOCKWISE;
+        pwm_motor(motorValue, motorDirection);
+    }
+    else {
+        freespin_motor();   
+    }
 }
 
 void updateMotor(void){
     switch (motor_state) {
         case SPRING:
-            if (joystickAngle > buffer) {
-                motorValue = (uint16_t)((joystickAngle - buffer )* 100);
-                motorDirection = false;
-                pwm_motor(motorValue, motorDirection);
-
-            }
-            else if (joystickAngle < -buffer){
-                motorValue = (uint16_t)((-joystickAngle + buffer) * 100);                
-                motorDirection = true;
-                pwm_motor(motorValue, motorDirection);
-
-            }
-            else {
-                freespin_motor();              
-            
-            }
+            spring();
             break;
         case DAMPER:
-            if (joystickSpeed > speedBuffer) {
-                motorValue = (uint16_t)((joystickSpeed - speedBuffer )* 1000000);
-                motorDirection = true;
-                pwm_motor(motorValue, motorDirection);
-
-            }
-            else if (joystickSpeed < -speedBuffer){
-                motorValue = (uint16_t)((-joystickSpeed + speedBuffer) * 1000000);                
-                motorDirection = false;
-                pwm_motor(motorValue, motorDirection);
-
-            }
-            else {
-                freespin_motor();              
-            
-            }
-
+            damper(100000);
+            break;
+        case TEXTURE:
+            texture();
+            break;
+        case WALL:
+            wall();
+            break;
     }
 }
-
-
 
 void reset(void) {
 
