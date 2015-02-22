@@ -32,7 +32,7 @@ baseDependencies = ['../lib/timer.c',
 
 functions = {
                 'joystick'   : baseDependencies + ['usb.c'] + ['descriptors.c'],
-                'hellousb'   : baseDependencies + ['usb.c'] + ['descriptors.c'],
+                # 'hellousb'   : baseDependencies + ['usb.c'] + ['descriptors.c'],
                 'hello'      : baseDependencies,
                 # 'helloMotor' : baseDependencies,
             }

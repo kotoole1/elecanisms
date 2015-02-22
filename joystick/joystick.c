@@ -16,15 +16,19 @@
 #define GET_PIN       0
 #define GET_ANGLE     1
 #define RESET         2
+#define SET_MODE      3
 
 volatile uint16_t read;
 volatile uint16_t lastRead;
 volatile uint16_t lastLastRead;
+volatile double joystickSpeed;
+double lastAngle;
 double partialFlips;
 double firstPartialFlips;
 uint16_t motorValue;
 bool motorDirection;
 double buffer = 0.1;
+double speedBuffer = .001;
 
 int16_t rawDiff;
 int16_t lastRawDiff;
@@ -74,7 +78,9 @@ void updateAngle(void) {
     } else {                       // anytime no flip has occurred
         flipped = false;
     }
+    lastAngle = joystickAngle;
     joystickAngle = joystickPosition(read, flipNumber) ; // need to update pos based on what most recent offset is 
+    joystickSpeed = lastAngle - joystickAngle;
 }
 
 void printAngle() {
@@ -101,6 +107,24 @@ void updateMotor(void){
             
             }
             break;
+        case DAMPER:
+            if (joystickSpeed > speedBuffer) {
+                motorValue = (uint16_t)((joystickSpeed - speedBuffer )* 1000000);
+                motorDirection = true;
+                pwm_motor(motorValue, motorDirection);
+
+            }
+            else if (joystickSpeed < -speedBuffer){
+                motorValue = (uint16_t)((-joystickSpeed + speedBuffer) * 1000000);                
+                motorDirection = false;
+                pwm_motor(motorValue, motorDirection);
+
+            }
+            else {
+                freespin_motor();              
+            
+            }
+
     }
 }
 
@@ -132,6 +156,11 @@ void VendorRequests(void) {
             break;
         case RESET:
             reset();
+            BD[EP0IN].bytecount = 0;    // set EP0 IN byte count to 0 
+            BD[EP0IN].status = 0xC8;    // send packet as DATA1, set UOWN bit
+            break;
+        case SET_MODE:
+            motor_state = USB_setup.wValue.w;
             BD[EP0IN].bytecount = 0;    // set EP0 IN byte count to 0 
             BD[EP0IN].status = 0xC8;    // send packet as DATA1, set UOWN bit
             break;

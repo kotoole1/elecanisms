@@ -10,7 +10,7 @@
 
 
 
-MotorState motor_state = SPRING;
+MotorState motor_state = DAMPER;
 MotorDirection motor_direction = ZERO;
 volatile uint16_t switch1;
 volatile bool lastDirection = false;

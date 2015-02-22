@@ -6,8 +6,7 @@ class hellousb:
         self.GET_PIN = 0
         self.GET_ANGLE = 1
         self.RESET = 2
-        # self.GET_VALS = 2
-        # self.PRINT_VALS = 3
+        self.SET_MODE = 3
         self.dev = usb.core.find(idVendor = 0x6666, idProduct = 0x0003)
         if self.dev is None:
             raise ValueError('no USB device found matching idVendor = 0x6666 and idProduct = 0x0003')
@@ -15,6 +14,12 @@ class hellousb:
 
     def close(self):
         self.dev = None
+
+    def set_mode(self, mode):
+        try:
+            self.dev.ctrl_transfer(0x40, self.SET_MODE, int(mode))
+        except usb.core.USBError:
+            print "Could not send HELLO vendor request."
 
     def reset(self):
         try:
