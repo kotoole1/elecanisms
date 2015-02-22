@@ -24,7 +24,7 @@ double partialFlips;
 double firstPartialFlips;
 uint16_t motorValue;
 bool motorDirection;
-double buffer = 0.2;
+double buffer = 0.1;
 
 int16_t rawDiff;
 int16_t lastRawDiff;
@@ -32,7 +32,7 @@ int16_t lastRawOffset;
 int16_t rawOffset;
 int16_t flipNumber;
 
-uint16_t flipThreshold = 200;
+uint16_t flipThreshold = 500;
 volatile uint16_t numPassed = 0;
 volatile double joystickAngle = 0.0;
 
@@ -163,6 +163,7 @@ int16_t main(void) {
     init_motor();
     InitUSB();
     reset();
+
 
     while (USB_USWSTAT!=CONFIG_STATE) {     // while the peripheral is not configured...
         ServiceUSB();                       // ...service USB requests

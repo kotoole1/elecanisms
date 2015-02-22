@@ -8,8 +8,12 @@
 #include "motor.h"
 #include <stdbool.h> 
 
+
+
 MotorState motor_state = SPRING;
+MotorDirection motor_direction = ZERO;
 volatile uint16_t switch1;
+volatile bool lastDirection = false;
 
 void stop_motor() {
     pin_clear(&D[5]);
@@ -38,11 +42,14 @@ void freespin_motor() {
 
 void pwm_motor(uint16_t duty, bool direction)
 {
-    if (direction) {
-        start_motor_clockwise();
-    }
-    else {
-        start_motor_counterClockwise();
+    if (direction != motor_direction) {
+        if (direction) {
+            start_motor_clockwise();
+        }
+        else {
+            start_motor_counterClockwise();
+        }
+        lastDirection = direction;
     }
         oc_pwm(&oc1, &D[4], NULL, 500, duty << 6);
 }

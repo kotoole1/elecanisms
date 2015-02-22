@@ -14,6 +14,14 @@ typedef enum {
     WALL,
 } MotorState;
 
+typedef enum 
+{
+	CLOCKWISE,
+	COUNTERCLOCKWISE,
+	ZERO,
+} MotorDirection;
+
+extern MotorDirection motor_direction;
 extern MotorState motor_state;
 extern volatile uint16_t switch1;
 
