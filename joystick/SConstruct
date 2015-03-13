@@ -31,10 +31,11 @@ baseDependencies = ['../lib/timer.c',
                 ]
 
 functions = {
-                'joystick'   : baseDependencies + ['usb.c'] + ['descriptors.c'],
+                # 'joystick'   : baseDependencies + ['usb.c'] + ['descriptors.c'],
                 # 'hellousb'   : baseDependencies + ['usb.c'] + ['descriptors.c'],
-                'hello'      : baseDependencies,
+                # 'hello'      : baseDependencies,
                 # 'helloMotor' : baseDependencies,
+                'hellopump'  : baseDependencies 
             }
 
 for function, dependencies in functions.items():
